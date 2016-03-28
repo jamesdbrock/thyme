@@ -24,6 +24,7 @@ import Data.Basis
 import Data.Data
 import Data.Int
 import Data.Ix
+import Data.Ratio
 import Data.Thyme.Internal.Micro
 import Data.Thyme.Calendar.Internal
 #if __GLASGOW_HASKELL__ == 704
@@ -58,8 +59,13 @@ toSeconds = (* recip 1000000) . fromIntegral . view microseconds
 
 -- | Make a time interval from some 'Real' type.
 --
--- [@Performance@] Try to make sure @n@ is one of 'Float', 'Double', 'Int',
--- 'Int64' or 'Integer', for which rewrite @RULES@ have been provided.
+-- === Performance
+-- Try to make sure @n@ is one of these types for which re-write @RULES@ are
+-- provided, or else the argument will be
+-- Try to make sure @n@ is one of 'Float', 'Double', 'Int',
+-- 'Int64', 'Integer', 'Ratio' 'Int' or 'Ratio' 'Int64', for which rewrite
+-- @RULES@ have been provided.
+
 {-# INLINE[0] fromSeconds #-}
 fromSeconds :: (Real n, TimeDiff t) => n -> t
 fromSeconds = fromSeconds' . toRational
@@ -90,13 +96,21 @@ fromSecondsRealFrac _ = review microseconds . round . (*) 1000000
 fromSecondsIntegral :: (Integral n, TimeDiff t) => n -> n -> t
 fromSecondsIntegral _ = review microseconds . (*) 1000000 . fromIntegral
 
+{-# INLINE fromSecondsRatioInt #-}
+fromSecondsRatio :: (Ratio n, TimeDiff t) => n -> n -> t
+fromSecondsRatio _ x = review microseconds
+                        $ (/ fromIntegral (denominator x))
+                        $ (1000000*) $ fromIntegral $ numerator x
+
 {-# RULES
 
-"fromSeconds/Float"    [~0] fromSeconds = fromSecondsRealFrac (0 :: Float)
-"fromSeconds/Double"   [~0] fromSeconds = fromSecondsRealFrac (0 :: Double)
-"fromSeconds/Int"      [~0] fromSeconds = fromSecondsIntegral (0 :: Int)
-"fromSeconds/Int64"    [~0] fromSeconds = fromSecondsIntegral (0 :: Int64)
-"fromSeconds/Integer"  [~0] fromSeconds = fromSecondsIntegral (0 :: Integer)
+"fromSeconds/Float"       [ ~0] fromSeconds = fromSecondsRealFrac (0 :: Float)
+"fromSeconds/Double"      [ ~0] fromSeconds = fromSecondsRealFrac (0 :: Double)
+"fromSeconds/Int"         [ ~0] fromSeconds = fromSecondsIntegral (0 :: Int)
+"fromSeconds/Int64"       [ ~0] fromSeconds = fromSecondsIntegral (0 :: Int64)
+"fromSeconds/Integer"     [ ~0] fromSeconds = fromSecondsIntegral (0 :: Integer)
+"fromSeconds/Ratio Int"   [ ~0] fromSeconds = fromSecondsIntegral (0 :: Int)
+"fromSeconds/Ratio Int64" [ ~0] fromSeconds = fromSecondsIntegral (0 :: Int64)
 
   #-}
 
