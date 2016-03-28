@@ -31,7 +31,7 @@ module Data.Thyme.Clock (
     , DiffTime
 
     -- * UTC
-    , UTCTime, UTCView (..)
+    , UTCTime, UTCView
     , utcTime
     , NominalDiffTime
     , module Data.Thyme.Clock
