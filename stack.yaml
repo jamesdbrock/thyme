@@ -1,8 +1,4 @@
-flags:
-  QuickCheck:
-    base4point8: false
-  aeson:
-    old-locale: true
+flags: {}
 extra-package-dbs: []
 packages:
 - '.'
@@ -15,7 +11,7 @@ extra-deps:
 - StateVar-1.1.0.3
 - abstract-deque-0.3
 - abstract-par-0.3.3
-- aeson-0.11.0.0
+- aeson-0.11.1.4
 - ansi-terminal-0.6.2.3
 - ansi-wl-pprint-0.6.7.3
 - attoparsec-0.13.0.1
@@ -39,7 +35,7 @@ extra-deps:
 - monad-par-extras-0.3.3
 - mtl-2.2.1
 - mwc-random-0.13.4.0
-- nats-1.1
+- old-locale-1.0.0.7
 - optparse-applicative-0.12.1.0
 - parallel-3.2.1.0
 - parsec-3.1.9
@@ -55,7 +51,6 @@ extra-deps:
 - tagged-0.8.3
 - text-1.2.2.1
 - tf-random-0.5
-- transformers-0.5.2.0
 - transformers-compat-0.5.1.4
 - unordered-containers-0.2.7.0
 - vector-0.11.0.0
@@ -64,4 +59,4 @@ extra-deps:
 - vector-space-0.10.3
 - vector-th-unbox-0.2.1.4
 - void-0.7.1
-resolver: ghc-7.8.4
+resolver: ghc-7.10.3
